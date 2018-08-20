@@ -34,12 +34,11 @@
             {
                 if (string.IsNullOrEmpty(this.ImagePath))
                 {
-                    return "noproduct";
+                    return "no_image";
                 }
 
                 return $"https://salesbackend.azurewebsites.net/{this.ImagePath.Substring(1)}";
             }
-
         }
 
         public override string ToString()
