@@ -26,6 +26,7 @@
 
         [Display(Name = "Publish On")]
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime PublishOn { get; set; }
 
         public string ImageFullPath

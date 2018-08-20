@@ -5,6 +5,11 @@
              x:Class="Sales.Views.ProductsPage"
              BindingContext="{Binding Main, Source={StaticResource Locator}}"
              Title="{i18n:Translate Products}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding AddProductCommand}" 
+            Icon="ic_action_add_circle"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout
             BindingContext="{Binding Products}"

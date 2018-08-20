@@ -55,7 +55,11 @@
     <Compile Include="Services\ApiService.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\NewProductViewModel.cs" />
     <Compile Include="ViewModels\ProductsViewModel.cs" />
+    <Compile Include="Views\NewProductPage.xaml.cs">
+      <DependentUpon>NewProductPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProductsPage.xaml.cs">
       <DependentUpon>ProductsPage.xaml</DependentUpon>
     </Compile>
@@ -117,6 +121,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\ProductsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\NewProductPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

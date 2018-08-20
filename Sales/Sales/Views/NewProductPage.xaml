@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:i18n="clr-namespace:Sales.Helpers"
+             x:Class="Sales.Views.NewProductPage"
+             BindingContext="{Binding Main, Source={StaticResource Locator}}"
+             Title="{i18n:Translate NewProduct}">
+    <ContentPage.Content>
+        <StackLayout
+            BindingContext="{Binding NewProduct}"
+            Padding="5">
+            <Image
+                Source="noimage">
+            </Image>
+            <Label
+                FontSize="Micro"
+                HorizontalOptions="Center"
+                Text="{i18n:Translate ChangeImage}">
+            </Label>
+            <Label
+                Text="{i18n:Translate Description}">
+            </Label>
+            <Entry
+                Placeholder="{i18n:Translate DescriptionPlaceHolder}">
+            </Entry>
+            <Label
+                Text="{i18n:Translate Price}">
+            </Label>
+            <Entry
+                Keyboard="Numeric"
+                Placeholder="{i18n:Translate PricePlaceHolder}">
+            </Entry>
+            <ActivityIndicator
+                IsRunning="{Binding IsRunning}"
+                VerticalOptions="CenterAndExpand">
+            </ActivityIndicator>
+            <Button
+                BackgroundColor="Navy"
+                BorderRadius="23"
+                HeightRequest="46"
+                Margin="20,0"
+                Text="{i18n:Translate Save}"
+                TextColor="White">
+            </Button>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
