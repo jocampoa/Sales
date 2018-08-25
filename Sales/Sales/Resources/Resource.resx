@@ -126,6 +126,9 @@
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
+  <data name="DescriptionError" xml:space="preserve">
+    <value>You must enter a description.</value>
+  </data>
   <data name="DescriptionPlaceHolder" xml:space="preserve">
     <value>Enter the product description...</value>
   </data>
@@ -141,11 +144,17 @@
   <data name="Price" xml:space="preserve">
     <value>Price</value>
   </data>
+  <data name="PriceError" xml:space="preserve">
+    <value>You must enter a price greater than zero.</value>
+  </data>
   <data name="PricePlaceHolder" xml:space="preserve">
     <value>Enter the product price...</value>
   </data>
   <data name="Products" xml:space="preserve">
     <value>Products</value>
+  </data>
+  <data name="Remarks" xml:space="preserve">
+    <value>Remarks</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>

@@ -16,7 +16,7 @@
             this.Products = new ProductsViewModel();
         }
 
-        public ICommand AddProductCommand
+        public ICommand NewProductCommand
         {
             get
             {
