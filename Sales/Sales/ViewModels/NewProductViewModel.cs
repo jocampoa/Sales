@@ -4,12 +4,18 @@
     using Common.Models;
     using GalaSoft.MvvmLight.Command;
     using Helpers;
+    using Plugin.Media;
+    using Plugin.Media.Abstractions;
     using Services;
     using Xamarin.Forms;
 
     public class NewProductViewModel : BaseViewModel
     {
-        #region Attributes 
+        #region Attributes
+        private MediaFile file;
+
+        private ImageSource imageSource;
+
         private ApiService apiService;
 
         private bool isRunning;
@@ -35,6 +41,12 @@
             get { return this.isEnabled; }
             set { this.SetValue(ref this.isEnabled, value); }
         }
+
+        public ImageSource ImageSource
+        {
+            get { return this.imageSource; }
+            set { this.SetValue(ref this.imageSource, value); }
+        }
         #endregion
 
         #region Contructors
@@ -42,10 +54,62 @@
         {
             this.IsEnabled = true;
             this.apiService = new ApiService();
+            this.ImageSource = "no_image";
         }
         #endregion
 
         #region Commands
+        public ICommand ChangeImageCommand
+        {
+            get
+            {
+                return new RelayCommand(ChangeImage);
+            }
+        }
+
+        private async void ChangeImage()
+        {
+            await CrossMedia.Current.Initialize();
+
+            var source = await Application.Current.MainPage.DisplayActionSheet(
+                Languages.ImageSource,
+                Languages.Cancel,
+                null,
+                Languages.FromGallery,
+                Languages.NewPicture);
+
+            if (source == Languages.Cancel)
+            {
+                this.file = null;
+                return;
+            }
+
+            if (source == Languages.NewPicture)
+            {
+                this.file = await CrossMedia.Current.TakePhotoAsync(
+                    new StoreCameraMediaOptions
+                    {
+                        Directory = "Sample",
+                        Name = "test.jpg",
+                        PhotoSize = PhotoSize.Small,
+                    }
+                );
+            }
+            else
+            {
+                this.file = await CrossMedia.Current.PickPhotoAsync();
+            }
+
+            if (this.file != null)
+            {
+                this.ImageSource = ImageSource.FromStream(() =>
+                {
+                    var stream = this.file.GetStream();
+                    return stream;
+                });
+            }
+        }
+
         public ICommand SaveCommand
         {
             get
@@ -87,13 +151,6 @@
             this.IsRunning = true;
             this.IsEnabled = false;
 
-            var product = new Product
-            {
-                Description = this.Description,
-                Price = price,
-                Remarks = this.Remarks,
-            };
-
             var connection = await this.apiService.CheckConnection();
             if (!connection.IsSuccess)
             {
@@ -102,6 +159,20 @@
                 await Application.Current.MainPage.DisplayAlert(Languages.Error, connection.Message, Languages.Accept);
                 return;
             }
+
+            byte[] imageArray = null;
+            if (this.file != null)
+            {
+                imageArray = FilesHelper.ReadFully(this.file.GetStream());
+            }
+
+            var product = new Product
+            {
+                Description = this.Description,
+                Price = price,
+                Remarks = this.Remarks,
+                ImageArray = imageArray,
+            };
 
             var url = Application.Current.Resources["UrlAPI"].ToString();
             var prefix = Application.Current.Resources["UrlPrefix"].ToString();
@@ -121,7 +192,17 @@
 
             var newProduct = (Product)response.Result;
             var viewModel = ProductsViewModel.GetInstance();
-            viewModel.Products.Add(newProduct);
+            viewModel.Products.Add(new ProductItemViewModel
+            {
+                Description = newProduct.Description,
+                ImageArray = newProduct.ImageArray,
+                ImagePath = newProduct.ImagePath,
+                IsAvailable = newProduct.IsAvailable,
+                Price = newProduct.Price,
+                ProductId = newProduct.ProductId,
+                PublishOn = newProduct.PublishOn,
+                Remarks = newProduct.Remarks,
+            });
 
             this.IsRunning = false;
             this.IsEnabled = true;

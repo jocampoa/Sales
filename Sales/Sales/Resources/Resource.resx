@@ -120,8 +120,20 @@
   <data name="Accept" xml:space="preserve">
     <value>Accept</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="ChangeImage" xml:space="preserve">
     <value>No image, touch to change it.</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteConfirmation" xml:space="preserve">
+    <value>Are you sure to delete this?</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
@@ -132,11 +144,26 @@
   <data name="DescriptionPlaceHolder" xml:space="preserve">
     <value>Enter the product description...</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="FromGallery" xml:space="preserve">
+    <value>From gallery</value>
+  </data>
+  <data name="ImageSource" xml:space="preserve">
+    <value>Where do you take the picture?</value>
+  </data>
+  <data name="NewPicture" xml:space="preserve">
+    <value>Take a new picture</value>
+  </data>
   <data name="NewProduct" xml:space="preserve">
     <value>New Product</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
   </data>
   <data name="NoInternet" xml:space="preserve">
     <value>No internet connection.</value>
@@ -161,5 +188,8 @@
   </data>
   <data name="TurnOnInternet" xml:space="preserve">
     <value>Please turn on your internet settings.</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class Product
     {
@@ -29,6 +30,9 @@
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime PublishOn { get; set; }
 
+        [NotMapped]
+        public byte[] ImageArray { get; set; }
+
         public string ImageFullPath
         {
             get
@@ -38,7 +42,7 @@
                     return "no_image";
                 }
 
-                return $"https://salesbackend.azurewebsites.net/{this.ImagePath.Substring(1)}";
+                return $"https://salesapiservices.azurewebsites.net/{this.ImagePath.Substring(1)}";
             }
         }
 
