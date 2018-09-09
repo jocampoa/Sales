@@ -6,15 +6,24 @@ using Xamarin.Forms.Xaml;
 namespace Sales
 {
     using Views;
+    using ViewModels;
+    using Helpers;
 
     public partial class App : Application
     {
+        #region Properties
+        public static NavigationPage Navigator { get; internal set; }
+        #endregion
+
+        #region Constructors
         public App()
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new ProductsPage());
+            MainViewModel.GetInstance().Login = new LoginViewModel();
+            MainPage = new LoginPage();
         }
+        #endregion
 
         protected override void OnStart()
         {

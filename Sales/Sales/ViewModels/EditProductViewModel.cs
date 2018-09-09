@@ -1,17 +1,21 @@
 ﻿namespace Sales.ViewModels
 {
-    using System.Windows.Input;
     using Common.Models;
     using GalaSoft.MvvmLight.Command;
-    using Helpers;
     using Plugin.Media;
     using Plugin.Media.Abstractions;
+    using Sales.Helpers;
     using Services;
+    using System;
+    using System.Linq;
+    using System.Windows.Input;
     using Xamarin.Forms;
 
-    public class NewProductViewModel : BaseViewModel
+    public class EditProductViewModel : BaseViewModel
     {
         #region Attributes
+        private Product product;
+
         private MediaFile file;
 
         private ImageSource imageSource;
@@ -24,11 +28,11 @@
         #endregion
 
         #region Properties
-        public string Description { get; set; }
-
-        public string Price { get; set; }
-
-        public string Remarks { get; set; }
+        public Product Product
+        {
+            get { return this.product; }
+            set { this.SetValue(ref this.product, value); }
+        }
 
         public bool IsRunning
         {
@@ -49,16 +53,75 @@
         }
         #endregion
 
-        #region Contructors
-        public NewProductViewModel()
+        #region Constructors
+        public EditProductViewModel(Product product)
         {
-            this.IsEnabled = true;
+            this.product = product;
             this.apiService = new ApiService();
-            this.ImageSource = "no_image";
+            this.IsEnabled = true;
+            this.ImageSource = product.ImageFullPath;
         }
         #endregion
 
         #region Commands
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                return new RelayCommand(Delete);
+            }
+        }
+
+        private async void Delete()
+        {
+            var answer = await Application.Current.MainPage.DisplayAlert(
+                Languages.Confirm,
+                Languages.DeleteConfirmation,
+                Languages.Yes,
+                Languages.No);
+            if (!answer)
+            {
+                return;
+            }
+
+            this.IsRunning = true;
+            this.IsEnabled = false;
+
+            var connection = await this.apiService.CheckConnection();
+            if (!connection.IsSuccess)
+            {
+                this.IsRunning = false;
+                this.IsEnabled = true;
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, connection.Message, Languages.Accept);
+                return;
+            }
+
+            var url = Application.Current.Resources["UrlAPI"].ToString();
+            var prefix = Application.Current.Resources["UrlPrefix"].ToString();
+            var controller = Application.Current.Resources["UrlProductsController"].ToString();
+            var response = await this.apiService.Delete(url, prefix, controller, this.Product.ProductId);
+            if (!response.IsSuccess)
+            {
+                this.IsRunning = false;
+                this.IsEnabled = true;
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, response.Message, Languages.Accept);
+                return;
+            }
+
+            var productsViewModel = ProductsViewModel.GetInstance();
+            var deletedProduct = productsViewModel.MyProducts.Where(p => p.ProductId == this.Product.ProductId).FirstOrDefault();
+            if (deletedProduct != null)
+            {
+                productsViewModel.MyProducts.Remove(deletedProduct);
+            }
+
+            productsViewModel.RefreshList();
+
+            this.IsRunning = false;
+            this.IsEnabled = true;
+            await Application.Current.MainPage.Navigation.PopAsync();
+        }
+
         public ICommand ChangeImageCommand
         {
             get
@@ -120,7 +183,7 @@
 
         private async void Save()
         {
-            if (string.IsNullOrEmpty(this.Description))
+            if (string.IsNullOrEmpty(this.Product.Description))
             {
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
@@ -129,17 +192,7 @@
                 return;
             }
 
-            if (string.IsNullOrEmpty(this.Price))
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    Languages.Error,
-                    Languages.PriceError,
-                    Languages.Accept);
-                return;
-            }
-
-            var price = decimal.Parse(this.Price);
-            if (price < 0)
+            if (this.Product.Price < 0)
             {
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
@@ -156,7 +209,10 @@
             {
                 this.IsRunning = false;
                 this.IsEnabled = true;
-                await Application.Current.MainPage.DisplayAlert(Languages.Error, connection.Message, Languages.Accept);
+                await Application.Current.MainPage.DisplayAlert(
+                    Languages.Error,
+                    connection.Message,
+                    Languages.Accept);
                 return;
             }
 
@@ -164,36 +220,35 @@
             if (this.file != null)
             {
                 imageArray = FilesHelper.ReadFully(this.file.GetStream());
+                this.Product.ImageArray = imageArray;
             }
-
-            var product = new Product
-            {
-                Description = this.Description,
-                Price = price,
-                Remarks = this.Remarks,
-                ImageArray = imageArray,
-            };
 
             var url = Application.Current.Resources["UrlAPI"].ToString();
             var prefix = Application.Current.Resources["UrlPrefix"].ToString();
             var controller = Application.Current.Resources["UrlProductsController"].ToString();
-            var response = await this.apiService.Post(url, prefix, controller, product);
+            var response = await this.apiService.Put(url, prefix, controller, this.Product, this.Product.ProductId);
 
             if (!response.IsSuccess)
             {
                 this.IsRunning = false;
                 this.IsEnabled = true;
                 await Application.Current.MainPage.DisplayAlert(
-                    Languages.Error, 
-                    response.Message, 
+                    Languages.Error,
+                    response.Message,
                     Languages.Accept);
                 return;
             }
 
             var newProduct = (Product)response.Result;
-            var productsviewModel = ProductsViewModel.GetInstance();
-            productsviewModel.MyProducts.Add(newProduct);
-            productsviewModel.RefreshList();
+            var productsViewModel = ProductsViewModel.GetInstance();
+            var oldProduct = productsViewModel.MyProducts.Where(p => p.ProductId == this.Product.ProductId).FirstOrDefault();
+            if (oldProduct != null)
+            {
+                productsViewModel.MyProducts.Remove(oldProduct);
+            }
+
+            productsViewModel.MyProducts.Add(newProduct);
+            productsViewModel.RefreshList();
 
             this.IsRunning = false;
             this.IsEnabled = true;
