@@ -227,5 +227,45 @@
         {
             get { return Resource.About; }
         }
+
+        public static string NoProductsMessage
+        {
+            get { return Resource.NoProductsMessage; }
+        }
+
+        public static string FirstNameError
+        {
+            get { return Resource.FirstNameError; }
+        }
+
+        public static string LastNameError
+        {
+            get { return Resource.LastNameError; }
+        }
+
+        public static string EMailError
+        {
+            get { return Resource.EMailError; }
+        }
+
+        public static string PhoneError
+        {
+            get { return Resource.PhoneError; }
+        }
+
+        public static string PasswordError
+        {
+            get { return Resource.PasswordError; }
+        }
+
+        public static string PasswordConfirmError
+        {
+            get { return Resource.PasswordConfirmError; }
+        }
+
+        public static string PasswordsNoMatch
+        {
+            get { return Resource.PasswordsNoMatch; }
+        }
     }
 }

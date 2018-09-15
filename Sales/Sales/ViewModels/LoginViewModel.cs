@@ -3,6 +3,7 @@
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
     using Helpers;
+    using Sales.Views;
     using Services;
     using Xamarin.Forms;
 
@@ -46,6 +47,20 @@
         #endregion
 
         #region Commands
+        public ICommand RegisterCommand
+        {
+            get
+            {
+                return new RelayCommand(Register);
+            }
+        }
+
+        private async void Register()
+        {
+            MainViewModel.GetInstance().Register = new RegisterViewModel();
+            await Application.Current.MainPage.Navigation.PushAsync(new RegisterPage());
+        }
+
         public ICommand LoginCommand
         {
             get
@@ -94,19 +109,18 @@
                 this.IsRunning = false;
                 this.IsEnabled = true;
                 await Application.Current.MainPage.DisplayAlert(Languages.Error, Languages.SomethingWrong, Languages.Accept);
-                this.Password = string.Empty;
                 return;
             }
 
-            //Settings
+            Settings.TokenType = token.TokenType;
+            Settings.AccessToken = token.AccessToken;
+            Settings.IsRemembered = this.IsRemembered;
+
+            MainViewModel.GetInstance().Products = new ProductsViewModel();
+            Application.Current.MainPage = new MasterPage();
 
             this.IsRunning = false;
             this.IsEnabled = true;
-            this.Email = string.Empty;
-            this.Password = string.Empty;
-
-            MainViewModel.GetInstance().Products = new ProductsViewModel();
-            Application.Current.MainPage = new MasterDetailPage();
         }
         #endregion
     }

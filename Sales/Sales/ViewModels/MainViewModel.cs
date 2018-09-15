@@ -20,6 +20,8 @@
 
         public ObservableCollection<MenuItemViewModel> Menu { get; set; }
 
+        public RegisterViewModel Register { get; set; }
+
         #endregion
 
         #region Constructors
@@ -84,7 +86,7 @@
         private async void AddProduct()
         {
             this.NewProduct = new NewProductViewModel();
-            await Application.Current.MainPage.Navigation.PushAsync(new NewProductPage());
+            await App.Navigator.PushAsync(new NewProductPage());
         }
         #endregion
     }

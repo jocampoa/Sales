@@ -29,9 +29,11 @@
         {
             if (this.PageName == "LoginPage")
             {
-                //Settings
+                Settings.AccessToken = string.Empty;
+                Settings.TokenType = string.Empty;
+                Settings.IsRemembered = false;
                 MainViewModel.GetInstance().Login = new LoginViewModel();
-                Application.Current.MainPage = new LoginPage();
+                Application.Current.MainPage = new NavigationPage(new LoginPage());
             }
         }
         #endregion

@@ -246,4 +246,28 @@
   <data name="Yes" xml:space="preserve">
     <value>Sim</value>
   </data>
+  <data name="EMailError" xml:space="preserve">
+    <value>Você deve inserir um endereço de email válido.</value>
+  </data>
+  <data name="FirstNameError" xml:space="preserve">
+    <value>Você deve inserir um nome.</value>
+  </data>
+  <data name="LastNameError" xml:space="preserve">
+    <value>Digite um sobrenome.</value>
+  </data>
+  <data name="NoProductsMessage" xml:space="preserve">
+    <value>Nenhuma informação de produtos disponível.</value>
+  </data>
+  <data name="PasswordConfirmError" xml:space="preserve">
+    <value>Tem de introduzir uma palavra-passe</value>
+  </data>
+  <data name="PasswordError" xml:space="preserve">
+    <value>Informe uma nova senha com no mínimo 6 caracteres.</value>
+  </data>
+  <data name="PasswordsNoMatch" xml:space="preserve">
+    <value>A senha e confirme a deve ser igual a.</value>
+  </data>
+  <data name="PhoneError" xml:space="preserve">
+    <value>Você deve digitar um número de telefone.</value>
+  </data>
 </root>
