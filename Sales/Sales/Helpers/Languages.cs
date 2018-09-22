@@ -267,5 +267,10 @@
         {
             get { return Resource.PasswordsNoMatch; }
         }
+
+        public static string RegisterConfirmation
+        {
+            get { return Resource.RegisterConfirmation; }
+        }
     }
 }

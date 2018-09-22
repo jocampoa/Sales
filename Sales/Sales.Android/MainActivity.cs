@@ -6,6 +6,7 @@
     using Android.OS;
     using Plugin.Permissions;
     using Plugin.CurrentActivity;
+    using ImageCircle.Forms.Plugin.Droid;
 
     [Activity(Label = "Sales", 
         Icon = "@drawable/icon", 
@@ -21,7 +22,7 @@
 
             base.OnCreate(savedInstanceState);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
-
+            ImageCircleRenderer.Init();
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
         }

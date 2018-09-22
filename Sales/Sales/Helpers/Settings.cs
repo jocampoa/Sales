@@ -23,6 +23,7 @@ namespace Sales.Helpers
         private const string tokenType = "TokenType";
         private const string accessToken = "AccessToken";
         private const string isRemembered = "IsRemembered";
+        private const string userASP = "UserASP";
         private static readonly string stringDefault = string.Empty;
         private static readonly bool booleanDefault = false;
         #endregion
@@ -63,5 +64,17 @@ namespace Sales.Helpers
                 AppSettings.AddOrUpdateValue(isRemembered, value);
             }
         }
-	}
+
+        public static string UserASP
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(userASP, stringDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(userASP, value);
+            }
+        }
+    }
 }

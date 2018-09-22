@@ -3,9 +3,10 @@
     using System.Collections.ObjectModel;
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
+    using Sales.Common.Models;
     using Sales.Helpers;
     using Sales.Views;
-    using Xamarin.Forms;
+    //using Xamarin.Forms;
 
     public class MainViewModel
     {
@@ -22,6 +23,41 @@
 
         public RegisterViewModel Register { get; set; }
 
+        public UserASP UserASP { get; set; }
+
+        public string UserFullName
+        {
+            get
+            {
+                if (this.UserASP != null && this.UserASP.Claims != null && this.UserASP.Claims.Count > 1)
+                {
+                    return $"{this.UserASP.Claims[0].ClaimValue} {this.UserASP.Claims[1].ClaimValue}";
+                }
+
+                return null;
+            }
+        }
+
+        public string UserImageFullPath
+        {
+            get
+            {
+                foreach (var claim in this.UserASP.Claims)
+                {
+                    if (claim.ClaimType == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/uri")
+                    {
+                        if (claim.ClaimValue.StartsWith("~"))
+                        {
+                            return $"https://salesapiservices.azurewebsites.net{claim.ClaimValue.Substring(1)}";
+                        }
+
+                        return claim.ClaimValue;
+                    }
+                }
+
+                return null;
+            }
+        }
         #endregion
 
         #region Constructors

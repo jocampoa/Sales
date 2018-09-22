@@ -270,4 +270,7 @@
   <data name="PhoneError" xml:space="preserve">
     <value>Debe introducir un número de teléfono.</value>
   </data>
+  <data name="RegisterConfirmation" xml:space="preserve">
+    <value>El usuario se ha creado correctamente. Ahora puede ingresar con el correo electrónico y la contraseña asignada.</value>
+  </data>
 </root>

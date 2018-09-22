@@ -3,6 +3,8 @@
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
     using Helpers;
+    using Newtonsoft.Json;
+    using Sales.Common.Models;
     using Sales.Views;
     using Services;
     using Xamarin.Forms;
@@ -112,15 +114,27 @@
                 return;
             }
 
-            Settings.TokenType = token.TokenType;
-            Settings.AccessToken = token.AccessToken;
             Settings.IsRemembered = this.IsRemembered;
-
-            MainViewModel.GetInstance().Products = new ProductsViewModel();
-            Application.Current.MainPage = new MasterPage();
+            Settings.AccessToken = token.AccessToken;
+            Settings.TokenType = token.TokenType;
+            
+            var prefix = Application.Current.Resources["UrlPrefix"].ToString();
+            var controller = Application.Current.Resources["UrlUsersController"].ToString();
+            var response = await this.apiService.GetUser(url, prefix, $"{controller}/GetUser", this.Email, token.TokenType, token.AccessToken);
+            if (response.IsSuccess)
+            {
+                var userASP = (UserASP)response.Result;
+                MainViewModel.GetInstance().UserASP = userASP;
+                Settings.UserASP = JsonConvert.SerializeObject(userASP);
+            }
 
             this.IsRunning = false;
             this.IsEnabled = true;
+            this.Email = string.Empty;
+            this.Password = string.Empty;
+
+            MainViewModel.GetInstance().Products = new ProductsViewModel();
+            Application.Current.MainPage = new MasterPage();
         }
         #endregion
     }
