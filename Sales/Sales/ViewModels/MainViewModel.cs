@@ -2,11 +2,12 @@
 {
     using System.Collections.ObjectModel;
     using System.Windows.Input;
+    using Common.Models;
     using GalaSoft.MvvmLight.Command;
-    using Sales.Common.Models;
-    using Sales.Helpers;
-    using Sales.Views;
-    //using Xamarin.Forms;
+    using Helpers;
+    using Interfaces;
+    using Views;
+    using Xamarin.Forms;
 
     public class MainViewModel
     {
@@ -22,6 +23,8 @@
         public ObservableCollection<MenuItemViewModel> Menu { get; set; }
 
         public RegisterViewModel Register { get; set; }
+
+        public CategoriesViewModel Categories { get; set; }
 
         public UserASP UserASP { get; set; }
 
